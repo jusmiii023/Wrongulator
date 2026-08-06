@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kalkulator Sesat</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
+
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%237b2ff7'/><stop offset='100%' stop-color='%23ef4444'/></linearGradient><filter id='glow'><feGaussianBlur stdDeviation='3' result='coloredBlur'/><feMerge><feMergeNode in='coloredBlur'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs><rect width='100' height='100' rx='25' fill='url(%23bg)'/><g filter='url(%23glow)' fill='white' font-family='Arial, sans-serif' font-weight='bold'><text x='20' y='50' font-size='42'>%2B</text><text x='52' y='80' font-size='42'>%C3%B7</text><circle cx='78' cy='28' r='8' fill='%23ffcc00'/></g></svg>">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1 class="judul">KALKULATOR SESAT</h1>
+
+<button class="settingBtn" onclick="bukaSetting()">⚙️</button>
+
+<div id="setting" class="setting">
+
+<h2>Settings</h2>
+
+<div class="item">
+
+<span>Tema</span>
+
+<button onclick="gantiTema()">Ganti</button>
+
+</div>
+
+<div class="item">
+
+<div class="tingkat">
+
+    <h3>Tingkat Sesat</h3>
+
+    <button 
+    class="levelBtn normal active"
+    onclick="gantiTingkat('normal', this)">
+
+        🟢 Normal
+
+    </button>
+
+    <button 
+    class="levelBtn ringan"
+    onclick="gantiTingkat('ringan', this)">
+
+        🟠 Ringan
+
+    </button>
+
+    <button 
+    class="levelBtn sedang"
+    onclick="gantiTingkat('sedang', this)">
+
+        🔴 Sedang
+
+    </button>
+
+    <button 
+    class="levelBtn brutal"
+    onclick="gantiTingkat('brutal', this)">
+
+        🟣 Brutal
+
+    </button>
+
+</div>
+
+</div>
+
+<div class="absurdBox">
+
+<h3>💬 Jawaban Absurd</h3>
+
+<input
+id="inputAbsurd"
+type="text"
+placeholder="Tulis jawaban absurd...">
+
+<button
+class="absurdBtn"
+onclick="tambahAbsurd()">
+
+Tambah Jawaban
+
+</button>
+
+<div id="listAbsurd" class="listAbsurd"></div>
+
+</div>
+
+<div class="credit">
+    <h3>ABOUT</h3>
+
+    <h2>Kalkulator Sesat</h2>
+
+    <p class="version">
+        Version 0.57
+    </p>
+
+    <p class="tagline">
+        "Menghitung lebih cepat,<br>
+        belum tentu lebih benar."
+    </p>
+
+    <div class="creditLine"></div>
+
+    <div class="creditItem">
+
+        <span class="creditTitle">
+            👨‍💻 Made by
+        </span>
+
+        <span class="creditName">
+            Muhammad Jusmi
+        </span>
+
+    </div>
+
+    <div class="creditItem">
+
+        <span class="creditTitle">
+            🤖 Development Support
+        </span>
+
+        <span class="creditName">
+           ChatGPT & Gemini
+        </span>
+
+    </div>
+
+    <div class="creditItem">
+
+        <span class="creditTitle">
+            ⚡ Powered by
+        </span>
+
+        <span class="creditName">
+            HTML • CSS • JavaScript
+        </span>
+
+    </div>
+
+    <p class="footerText">
+
+        Made with ☕, bugs,
+        and questionable math.
+
+    </p>
+</div>
+
+</div>
+
+</div>
+
+<div class="display">
+
+<input
+type="text"
+id="hasil"
+readonly
+value="0">
+
+<button class="delete" onclick="hapus()">⌫</button>
+
+</div>
+
+<div class="kalkulator">
+
+<section>
+
+<button class="reset" onclick="resetKalkulator()">C</button>
+<button class="op" onclick="tambahKurungBuka()">(</button>
+<button class="op" onclick="tambahKurungTutup()">)</button>
+<button class="op" onclick="setOperator('%')">%</button>
+
+<button class="angka" onclick="tambahAngka(9)">9</button>
+<button class="angka" onclick="tambahAngka(8)">8</button>
+<button class="angka" onclick="tambahAngka(7)">7</button>
+<button class="op" onclick="setOperator('+')">+</button>
+
+<button class="angka" onclick="tambahAngka(6)">6</button>
+<button class="angka" onclick="tambahAngka(5)">5</button>
+<button class="angka" onclick="tambahAngka(4)">4</button>
+<button class="op" onclick="setOperator('-')">-</button>
+
+<button class="angka" onclick="tambahAngka(3)">3</button>
+<button class="angka" onclick="tambahAngka(2)">2</button>
+<button class="angka" onclick="tambahAngka(1)">1</button>
+<button class="op" onclick="setOperator('*')">×</button>
+
+<button class="op" onclick="tambahAngka('.')">.</button>
+<button class="angka" onclick="tambahAngka(0)">0</button>
+<button class="op" onclick="hitung()">=</button>
+<button class="op" onclick="setOperator('/')">÷</button>
+
+</section>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+</script>
+
+</body>
+
+</html>

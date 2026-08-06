@@ -1,0 +1,761 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+    transition:.3s;
+}
+
+body{
+    background:#0f172a;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+/* ===========================
+   JUDUL
+=========================== */
+.judul{
+    color:#fff;
+    font-size:30px;
+    margin-bottom:20px;
+    letter-spacing:2px;
+    text-align:center;
+}
+
+/* ===========================
+   SETTING BUTTON
+=========================== */
+.settingBtn{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.1);
+    backdrop-filter:blur(10px);
+    color:white;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.settingBtn:hover{
+    transform:rotate(90deg);
+}
+
+/* ===========================
+   DISPLAY
+=========================== */
+.display{
+    width:340px;
+    height:90px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:25px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px;
+    margin-bottom:20px;
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.35);
+}
+
+.display input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:white;
+    font-size:32px;
+    text-align:right;
+    padding-right:10px;
+}
+
+.display input::selection{
+    background:#3b82f6;
+}
+
+#hasil{
+    flex:1;
+    width:100%;
+    background:none;
+    border:none;
+    outline:none;
+    color:white;
+    font-size:42px;
+    text-align:right;
+}
+
+/* ===========================
+   DELETE
+=========================== */
+.delete{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:#f59e0b;
+    color:white;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.delete:hover{
+    transform:scale(1.1);
+}
+
+
+
+.itemAbsurd{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 14px;
+    margin:8px 0;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    gap:10px;
+}
+
+.itemAbsurd span{
+    flex:1;
+    word-break:break-word;
+}
+
+.hapusAbsurdBtn{
+    width:35px;
+    height:35px;
+    border:none;
+    border-radius:10px;
+    background:rgba(255,80,80,.15);
+    cursor:pointer;
+    transition:.2s;
+    font-size:16px;
+}
+
+.hapusAbsurdBtn:hover{
+    transform:scale(1.08);
+    border:1px solid #ff5555;
+}
+
+/* ===========================
+   KALKULATOR
+=========================== */
+.kalkulator{
+    width:340px;
+    padding:18px;
+    border-radius:30px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.4);
+}
+
+section{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+/* ===========================
+   BUTTON
+=========================== */
+button{
+    border:none;
+    outline:none;
+    cursor:pointer;
+    user-select:none;
+}
+
+.kalkulator button{
+    height:65px;
+    border-radius:18px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* ===========================
+   ANGKA
+=========================== */
+.angka{
+    background:rgba(255,255,255,.10);
+    backdrop-filter:blur(10px);
+    color:white;
+    box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.2),
+    0 5px 12px rgba(0,0,0,.2);
+}
+
+.angka:hover{
+    transform:translateY(-3px);
+    background:rgba(255,255,255,.18);
+}
+
+.angka:active{
+    transform:scale(.95);
+}
+
+/* ===========================
+   OPERATOR
+=========================== */
+
+.op{
+    background:#ef4444;
+    color:white;
+    box-shadow:
+    0 5px 15px rgba(239,68,68,.4);
+}
+
+.op:hover{
+    transform:translateY(-3px);
+}
+
+.op:active{
+    transform:scale(.95);
+}
+
+/* ===========================
+   RESET
+=========================== */
+.reset{
+    background:#f59e0b;
+    color:white;
+    box-shadow:
+    0 5px 15px rgba(245,158,11,.4);
+}
+
+.reset:hover{
+    transform:translateY(-3px);
+}
+
+.reset:active{
+    transform:scale(.95);
+}
+
+/* ===========================
+   LIGHT MODE
+=========================== */
+
+body.light{
+    background:#eef2ff;
+}
+
+body.light .judul{
+    color:#111827;
+}
+
+body.light .display{
+    background:rgba(255,255,255,.8);
+    border:1px solid #d1d5db;
+}
+
+body.light .display input{
+    color:#111827;
+}
+
+body.light .kalkulator{
+    background:rgba(255,255,255,.8);
+    border:1px solid #d1d5db;
+}
+
+body.light .angka{
+    background:#e5e7eb;
+    color:#111827;
+}
+
+body.light .settingBtn{
+    background:#ffffff;
+    color:#111827;
+}
+
+/* ===========================
+   ANIMASI
+=========================== */
+@keyframes muncul{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.display{
+    animation:muncul .5s;
+}
+
+.kalkulator{
+    animation:muncul .7s;
+}
+
+/* ===========================
+   SETTINGS
+=========================== */
+.setting{
+    position:fixed;
+    top:50%;
+    left:50%;
+    width:85%;
+    max-height:85vh;
+    max-width:420px;
+    padding:20px;
+    overflow-y:auto;
+    border-radius:20px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(30,35,60,.9);
+    transform:translate(-50%, -50%);
+    opacity:0;
+    transition:1s;
+    visibility: hidden;
+    pointer-events:none;
+    z-index:999;
+    scrollbar-width:thin;
+}
+
+.setting::-webkit-scrollbar{
+    width:6px;
+}
+
+.setting::-webkit-scrollbar-thumb{
+    background:#4d8cff;
+    border-radius:20px;
+}
+
+.setting.show{
+    transform:translate(-50%, -50%) scale(1);
+    opacity:1;
+    visibility: visible;
+    pointer-events:auto;
+}
+
+.setting h3{
+    color:white;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.setting h2{
+    font-size:26px;
+    font-weight:600;
+    text-align:center;
+    margin-bottom:20px;
+    letter-spacing:2px;
+    color:white;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+    color:white;
+}
+
+.item button{
+    padding:8px 15px;
+    border-radius:10px;
+    background:#3b82f6;
+    color:white;
+}
+
+/* CREDIT*/
+.credit{
+    text-align:center;
+    padding:25px 15px;
+    color:#fff;
+}
+
+.credit h3{
+    font-size:28px;
+    letter-spacing:4px;
+    margin-bottom:10px;
+}
+
+.credit h2{
+    font-size:24px;
+    margin-bottom:5px;
+}
+
+.version{
+    opacity:.7;
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+.tagline{
+    font-style:italic;
+    opacity:.8;
+    line-height:1.7;
+    margin-bottom:20px;
+}
+
+.creditLine{
+    width:70%;
+    height:1px;
+    margin:20px auto;
+    background:rgba(255,255,255,.15);
+}
+
+.creditItem{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    margin-bottom:18px;
+    padding:12px;
+    margin:12px 0;
+    border-radius:12px;
+    background:rgba(255,255,255,.06);
+    text-align:left;
+
+}
+
+.creditTitle{
+    font-size:13px;
+    opacity:.6;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.creditName{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.footerText{
+    margin-top:25px;
+    font-size:13px;
+    opacity:.5;
+    font-style:italic;
+    line-height:1.6;
+}
+
+/* =========================
+   JAWABAN ABSURD
+========================= */
+
+.absurdBox{
+    margin-top:20px;
+    padding:15px;
+    border-radius:18px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(10px);
+}
+
+.absurdBox h3{
+    text-align:center;
+    margin-bottom:15px;
+    font-size:20px;
+    color:#fff;
+    letter-spacing:1px;
+}
+
+#inputAbsurd{
+    width:100%;
+    padding:12px 15px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    color:white;
+    font-size:15px;
+    box-sizing:border-box;
+    transition:.25s;
+}
+
+#inputAbsurd::placeholder{
+    color:rgba(255,255,255,.5);
+}
+
+#inputAbsurd:focus{
+    background:rgba(255,255,255,.12);
+    box-shadow:0 0 15px rgba(255,255,255,.15);
+}
+
+.absurdBtn{
+    width:100%;
+    margin-top:12px;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#7b2ff7,#f107a3
+);
+
+color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.absurdBtn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(123,47,247,.4);
+}
+
+.absurdBtn:active{
+    transform:scale(.97);
+}
+
+.listAbsurd{
+    margin-top:15px;
+    max-height:180px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.itemAbsurd{
+    padding:10px 14px;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    color:white;
+    font-size:14px;
+    word-break:break-word;
+}
+
+/* ===========================
+   LEVEL BUTTON
+=========================== */
+.tingkat{
+    margin-top:20px;
+    border-top:1px solid rgba(255,255,255,.15);
+    padding-top:20px;
+}
+
+.tingkat h3{
+    text-align:center;
+    color:white;
+    margin-bottom:15px;
+    font-size:20px;
+}
+
+.levelBtn{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    margin-bottom:10px;
+    border:2px solid transparent;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    color:white;
+    font-size:15px;
+    font-family:inherit;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.levelBtn:hover{
+    background:rgba(255,255,255,.15);
+    transform:scale(1.02);
+}
+
+.levelBtn.active{
+    transform:scale(1.03);
+    font-weight: bold;
+}
+
+.levelBtn.normal.active{
+    border-color:#2ecc71;
+}
+
+.levelBtn.ringan.active{
+    border-color:#f1c40f;
+}
+
+.levelBtn.sedang.active{
+    border-color:#e74c3c;
+}
+
+.levelBtn.brutal.active{
+    border-color:#9b59b6;
+}
+
+
+/* ===========================
+   LIGHT MODE (Clean Glass Pastel)
+=========================== */
+/* Background gradasi lembut agar tidak flat */
+body.light {
+    background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+}
+body.light .judul {
+    color: #1e293b;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Display efek kaca terang */
+body.light .display {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 25px rgba(148, 163, 184, 0.25);
+}
+body.light .display input,
+body.light #hasil {
+    color: #0f172a;
+}
+
+/* Body Kalkulator efek kaca */
+body.light .kalkulator {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 30px rgba(148, 163, 184, 0.3);
+}
+
+/* Tombol Angka */
+body.light .angka {
+    background: rgba(255, 255, 255, 0.85);
+    color: #1e293b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+body.light .angka:hover {
+    background: #ffffff;
+}
+
+/* Tombol Setting Icon */
+body.light .settingBtn {
+    background: rgba(255, 255, 255, 0.7);
+    color: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+/* Modal Setting saat Light Mode */
+body.light .setting {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+body.light .setting h2,
+body.light .setting h3,
+body.light .setting .item,
+body.light .setting .credit,
+body.light .setting .creditTitle,
+body.light .setting .creditName,
+body.light .setting .tagline,
+body.light .setting .footerText,
+body.light .setting .absurdBox h3 {
+    color: #1e293b;
+}
+body.light .setting .creditItem,
+body.light .setting .absurdBox,
+body.light .setting .itemAbsurd {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: #1e293b;
+}
+body.light #inputAbsurd {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+}
+body.light #inputAbsurd::placeholder {
+    color: #64748b;
+}
+body.light .levelBtn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+}
+body.light .levelBtn:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
+/* ===========================
+   BRUTAL MODE
+=========================== */
+body.brutal{
+    background:#220909;
+}
+
+body.brutal .judul{
+    color:#ff4d4d;
+    text-shadow:0 0 10px red,0 0 20px red;
+}
+
+body.brutal .op{
+    box-shadow: 0 0 15px red;
+}
+
+/* ===========================
+   ANIMATION
+=========================== */
+@keyframes chaos{
+
+    from{
+        transform:rotate(-2deg);
+    }
+
+    to{
+        transform:rotate(2deg);
+    }
+}
+
+@keyframes slide{
+
+    from{
+        opacity:0;
+        transform:translateX(40px);
+    }
+    
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+/* ===========================
+   SCROLLBAR
+=========================== */
+::-webkit-scrollbar{
+    width:8px;
+}
+::-webkit-scrollbar-thumb{
+    background:#3b82f6;
+    border-radius:10px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media(max-width:480px){
+
+    .judul{
+        font-size:24px;
+    }
+
+    .display{
+        width:100%;
+        max-width:340px;
+    }
+
+    .kalkulator{
+        width:100%;
+        max-width:340px;
+    }
+
+    .kalkulator button{
+        height:58px;
+        font-size:20px;
+    }
+
+    .setting{
+        width:90%;
+        right:5%;
+    }
+
+}
