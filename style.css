@@ -1,35 +1,159 @@
+/* ==========================================================
+   WRONGULATOR — STYLE
+   Rombak total dari versi glassmorphism generik ke identitas
+   "struk kertas kasir yang suka bohong". Semua warna & jarak
+   dipusatkan lewat CSS variable (custom property) di :root
+   dan di body, jadi mode gelap/terang tinggal GANTI VARIABEL-nya
+   aja, gak perlu nulis ulang tiap komponen kayak versi lama.
+========================================================== */
+
+/* ----------------------------------------------------------
+   1. RESET DASAR
+---------------------------------------------------------- */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
-    transition:.3s;
 }
 
+/* ----------------------------------------------------------
+   2. DESIGN TOKEN (variabel warna, font, radius)
+   Ini "kamus" warna satu-satunya. Kalau mau ganti nuansa
+   aplikasi, cukup ubah di sini.
+---------------------------------------------------------- */
+:root{
+    /* warna dasar */
+    --ink:        #0b0c10;   /* latar gelap */
+    --paper:      #e9ebf1;   /* latar terang, abu-kebiruan (bukan cream) */
+
+    /* warna aksen — masing-masing punya "peran" semantik */
+    --signal: #ff4d4f;   /* merah: operator matematika, alarm/kesalahan */
+    --trust:  #22c55e;   /* hijau: reliable / benar */
+    --amber:  #f5a524;   /* kuning: shaky / peringatan */
+    --glitch: #8b5cf6;   /* ungu: unhinged / kekacauan */
+
+    /* radius & font */
+    --radius: 22px;
+    --font-display: 'Space Grotesk', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* ----------------------------------------------------------
+   3. TEMA GELAP (default) & TERANG
+   Body cuma nyimpen variabel "peran" (--bg, --surface, dst)
+   yang mengacu ke token warna di atas. body.light tinggal
+   nimpa nilainya, semua komponen di bawah otomatis ikut.
+---------------------------------------------------------- */
 body{
-    background:#0f172a;
+    /* mode gelap */
+    --bg: var(--ink);
+    --surface: rgba(255,255,255,.06);       /* latar kartu */
+    --surface-soft: rgba(255,255,255,.09);  /* latar tombol angka */
+    --border: rgba(255,255,255,.14);
+    --text: #f4f5f9;
+    --text-dim: rgba(244,245,249,.6);
+
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
     min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:20px;
+    padding:32px 20px;
+    transition: background .3s, color .3s;
 }
 
-/* ===========================
-   JUDUL
-=========================== */
-.judul{
-    color:#fff;
-    font-size:30px;
-    margin-bottom:20px;
-    letter-spacing:2px;
+body.light{
+    --bg: var(--paper);
+    --surface: rgba(15,17,23,.045);
+    --surface-soft: rgba(15,17,23,.06);
+    --border: rgba(15,17,23,.12);
+    --text: #14161d;
+    --text-dim: rgba(20,22,29,.6);
+}
+
+/* Mode "Unhinged" (dulu brutal): nuansa merah gelap + efek glitch di brand.
+   PENTING: harus nimpa SEMUA variabel (bukan cuma --bg), karena kalau
+   Unhinged aktif bareng tema terang (body punya class "light" DAN "brutal"
+   sekaligus), --text dari .light bakal tetap kepake kalau di sini cuma
+   --bg doang yang diubah -> teks gelap ketimpa background gelap = hilang.
+   Dengan nimpa semua di sini, Unhinged selalu tampil gelap penuh & kontras,
+   gak peduli tema lagi terang atau gelap. */
+body.brutal{
+    --bg: #1a0709;
+    --surface: rgba(255,255,255,.06);
+    --surface-soft: rgba(255,255,255,.09);
+    --border: rgba(255,255,255,.16);
+    --text: #f4f5f9;
+    --text-dim: rgba(244,245,249,.6);
+}
+
+/* Hormati pengguna yang minta kurangi animasi */
+@media (prefers-reduced-motion: reduce){
+    *,
+    *::before,
+    *::after{
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+    }
+}
+
+/* Fokus keyboard tetap kelihatan (aksesibilitas) */
+button:focus-visible,
+input:focus-visible{
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------
+   4. BRAND / JUDUL
+---------------------------------------------------------- */
+.brand{
     text-align:center;
+    margin-bottom:22px;
 }
 
-/* ===========================
-   SETTING BUTTON
-=========================== */
+.brandMark{
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--text);
+}
+
+.brandGlitch{
+    margin-left:4px;
+}
+
+/* Efek glitch cuma nyala pas trust level "Unhinged" aktif */
+body.brutal .brandMark{
+    color: var(--signal);
+    text-shadow: 0 0 10px var(--signal), 0 0 26px rgba(255,77,79,.6);
+    animation: glitchFlicker 2.6s infinite;
+}
+
+@keyframes glitchFlicker{
+    0%, 92%, 100%{ transform: translate(0,0); }
+    93%{ transform: translate(-1px, 1px); }
+    95%{ transform: translate(1px, -1px); }
+    97%{ transform: translate(-1px, 0); }
+}
+
+.brandTag{
+    margin-top:6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+/* ----------------------------------------------------------
+   5. TOMBOL SETTINGS (gear)
+---------------------------------------------------------- */
 .settingBtn{
     position:absolute;
     top:20px;
@@ -38,49 +162,54 @@ body{
     height:45px;
     border:none;
     border-radius:50%;
-    background:rgba(255,255,255,.1);
-    backdrop-filter:blur(10px);
-    color:white;
+    background: var(--surface-soft);
+    backdrop-filter: blur(10px);
+    color: var(--text);
     cursor:pointer;
     font-size:20px;
+    transition:.3s;
 }
 
 .settingBtn:hover{
     transform:rotate(90deg);
 }
 
-/* ===========================
-   DISPLAY
-=========================== */
+/* ----------------------------------------------------------
+   6. KARTU UTAMA (display + garis sobekan + keypad jadi satu)
+---------------------------------------------------------- */
+.calcCard{
+    width:min(340px, 100%);
+    padding:20px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--border);
+    box-shadow: 0 14px 34px rgba(0,0,0,.35);
+    animation: muncul .6s ease;
+}
+
+@keyframes muncul{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   7. DISPLAY (hasil kalkulator)
+---------------------------------------------------------- */
 .display{
-    width:340px;
-    height:90px;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:25px;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding-bottom:16px;
+    overflow:hidden; /* biar stamp yang rotate gak keluar dari kartu */
+}
+
+.displayRow{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:15px;
-    margin-bottom:20px;
-    box-shadow:
-    0 8px 25px rgba(0,0,0,.35);
-}
-
-.display input{
-    flex:1;
-    background:transparent;
-    border:none;
-    outline:none;
-    color:white;
-    font-size:32px;
-    text-align:right;
-    padding-right:10px;
-}
-
-.display input::selection{
-    background:#3b82f6;
+    gap:10px;
 }
 
 #hasil{
@@ -89,421 +218,554 @@ body{
     background:none;
     border:none;
     outline:none;
-    color:white;
-    font-size:42px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-weight:600;
+    font-size:38px;
     text-align:right;
+    font-variant-numeric: tabular-nums;
 }
 
-/* ===========================
-   DELETE
-=========================== */
 .delete{
     width:45px;
     height:45px;
+    flex-shrink:0;
     border:none;
     border-radius:50%;
-    background:#f59e0b;
+    background: var(--amber);
     color:white;
     cursor:pointer;
     font-size:18px;
+    transition:.2s;
 }
 
 .delete:hover{
     transform:scale(1.1);
 }
 
-
-
-.itemAbsurd{
+/* Badge kecil "Reliable / Shaky / ..." di pojok kanan bawah display */
+.trustBadge{
+    align-self:flex-end;
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    padding:10px 14px;
-    margin:8px 0;
-    border-radius:12px;
-    background:rgba(255,255,255,.08);
-    gap:10px;
+    gap:6px;
+    font-family: var(--font-mono);
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color: var(--text-dim);
 }
 
-.itemAbsurd span{
-    flex:1;
-    word-break:break-word;
+.trustDot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    flex-shrink:0;
 }
 
-.hapusAbsurdBtn{
-    width:35px;
-    height:35px;
-    border:none;
+.dotGreen{ background: var(--trust); }
+.dotAmber{ background: var(--amber); }
+.dotRed{ background: var(--signal); }
+.dotPurple{ background: var(--glitch); }
+
+/* ----------------------------------------------------------
+   8. STAMP (cap "MISCALCULATED / NONSENSE / REJECTED")
+   Muncul sekilas di atas display pas jawaban gak bisa dipercaya.
+   Class "show" ditambahin lewat JS, lalu animasi ini yang
+   ngatur muncul-diem-menghilangnya secara otomatis.
+---------------------------------------------------------- */
+.stamp{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+    font-family: var(--font-display);
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color: var(--signal);
+    border:3px solid var(--signal);
     border-radius:10px;
-    background:rgba(255,80,80,.15);
-    cursor:pointer;
-    transition:.2s;
-    font-size:16px;
+    background: rgba(255,77,79,.06);
+    opacity:0;
+    transform: rotate(-8deg) scale(1.5);
 }
 
-.hapusAbsurdBtn:hover{
-    transform:scale(1.08);
-    border:1px solid #ff5555;
+.stamp.show{
+    animation: stampPulse 1.3s ease forwards;
 }
 
-/* ===========================
-   KALKULATOR
-=========================== */
-.kalkulator{
-    width:340px;
-    padding:18px;
-    border-radius:30px;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:
-    0 10px 30px rgba(0,0,0,.4);
+@keyframes stampPulse{
+    0%{   opacity:0;  transform: rotate(-8deg) scale(1.9); }
+    15%{  opacity:.9; transform: rotate(-8deg) scale(1.4); }
+    75%{  opacity:.9; transform: rotate(-8deg) scale(1.4); }
+    100%{ opacity:0;  transform: rotate(-8deg) scale(1.4); }
 }
 
+/* Getaran display pas jawabannya sesat/absurd/error */
+.display.shake{
+    animation: glitchShake .4s ease;
+}
+
+@keyframes glitchShake{
+    0%, 100%{ transform: translateX(0); }
+    20%{ transform: translateX(-4px); }
+    40%{ transform: translateX(4px); }
+    60%{ transform: translateX(-3px); }
+    80%{ transform: translateX(3px); }
+}
+
+/* ----------------------------------------------------------
+   9. GARIS SOBEKAN (perforation) — pemisah display & keypad
+   Dua lingkaran kecil di kiri-kanan warnanya = warna background
+   halaman, jadi keliatan kayak "lubang sobekan" struk asli.
+---------------------------------------------------------- */
+.perforation{
+    position:relative;
+    height:0;
+    border-top:2px dashed var(--border);
+    margin:4px 0 18px;
+}
+
+.perforation::before,
+.perforation::after{
+    content:"";
+    position:absolute;
+    top:-9px;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background: var(--bg);
+}
+
+.perforation::before{ left:-20px; }
+.perforation::after{ right:-20px; }
+
+/* ----------------------------------------------------------
+   10. KEYPAD
+---------------------------------------------------------- */
 section{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:12px;
 }
-/* ===========================
-   BUTTON
-=========================== */
+
 button{
     border:none;
     outline:none;
     cursor:pointer;
     user-select:none;
+    font-family: var(--font-display);
+    transition:.2s;
 }
 
 .kalkulator button{
-    height:65px;
-    border-radius:18px;
-    font-size:22px;
+    height:62px;
+    border-radius:16px;
+    font-size:20px;
     font-weight:bold;
 }
 
-/* ===========================
-   ANGKA
-=========================== */
+/* Angka pakai font mono biar berasa tombol kalkulator/kasir asli */
 .angka{
-    background:rgba(255,255,255,.10);
-    backdrop-filter:blur(10px);
-    color:white;
-    box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.2),
-    0 5px 12px rgba(0,0,0,.2);
+    background: var(--surface-soft);
+    color: var(--text);
+    font-family: var(--font-mono);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.08);
 }
 
 .angka:hover{
-    transform:translateY(-3px);
-    background:rgba(255,255,255,.18);
+    transform:translateY(-2px);
 }
 
 .angka:active{
     transform:scale(.95);
 }
 
-/* ===========================
-   OPERATOR
-=========================== */
+/* Tombol utilitas ( ) % . — netral, gak seheboh operator */
+.util{
+    background: var(--surface-soft);
+    color: var(--text-dim);
+}
 
+.util:hover{
+    transform:translateY(-2px);
+    color: var(--text);
+}
+
+.util:active{
+    transform:scale(.95);
+}
+
+/* Operator + - × ÷ — warna signal (merah) biar hierarki jelas */
 .op{
-    background:#ef4444;
+    background: var(--signal);
     color:white;
-    box-shadow:
-    0 5px 15px rgba(239,68,68,.4);
+    box-shadow: 0 6px 16px rgba(255,77,79,.35);
 }
 
 .op:hover{
-    transform:translateY(-3px);
+    transform:translateY(-2px);
 }
 
 .op:active{
     transform:scale(.95);
 }
 
-/* ===========================
-   RESET
-=========================== */
-.reset{
-    background:#f59e0b;
+/* Tombol "=" — paling penting (momen dipercaya/dibohongi),
+   jadi dikasih gradient signal->glitch supaya menonjol sendiri */
+.equals{
+    background: linear-gradient(135deg, var(--signal), var(--glitch));
     color:white;
-    box-shadow:
-    0 5px 15px rgba(245,158,11,.4);
+    box-shadow: 0 6px 18px rgba(139,92,246,.4);
+}
+
+.equals:hover{
+    transform:translateY(-2px);
+}
+
+.equals:active{
+    transform:scale(.95);
+}
+
+/* Reset "C" — amber, kesan "hati-hati/peringatan" */
+.reset{
+    background: var(--amber);
+    color:white;
+    box-shadow: 0 6px 16px rgba(245,165,36,.35);
 }
 
 .reset:hover{
-    transform:translateY(-3px);
+    transform:translateY(-2px);
 }
 
 .reset:active{
     transform:scale(.95);
 }
 
-/* ===========================
-   LIGHT MODE
-=========================== */
-
-body.light{
-    background:#eef2ff;
-}
-
-body.light .judul{
-    color:#111827;
-}
-
-body.light .display{
-    background:rgba(255,255,255,.8);
-    border:1px solid #d1d5db;
-}
-
-body.light .display input{
-    color:#111827;
-}
-
-body.light .kalkulator{
-    background:rgba(255,255,255,.8);
-    border:1px solid #d1d5db;
-}
-
-body.light .angka{
-    background:#e5e7eb;
-    color:#111827;
-}
-
-body.light .settingBtn{
-    background:#ffffff;
-    color:#111827;
-}
-
-/* ===========================
-   ANIMASI
-=========================== */
-@keyframes muncul{
-
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.display{
-    animation:muncul .5s;
-}
-
-.kalkulator{
-    animation:muncul .7s;
-}
-
-/* ===========================
-   SETTINGS
-=========================== */
+/* ==========================================================
+   11. SETTINGS — KONTAINER MODAL
+========================================================== */
 .setting{
     position:fixed;
     top:50%;
     left:50%;
     width:85%;
-    max-height:85vh;
     max-width:420px;
-    padding:20px;
-    overflow-y:auto;
+    max-height:85vh;
+    padding:0;
+    overflow:hidden;
     border-radius:20px;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(30,35,60,.9);
+    background: var(--surface);
+    backdrop-filter: blur(16px);
+    border:1px solid var(--border);
+    box-shadow: 0 20px 45px rgba(0,0,0,.35);
     transform:translate(-50%, -50%);
     opacity:0;
-    transition:1s;
-    visibility: hidden;
+    visibility:hidden;
     pointer-events:none;
+    transition: opacity .3s, transform .3s;
     z-index:999;
-    scrollbar-width:thin;
 }
 
-.setting::-webkit-scrollbar{
-    width:6px;
-}
-
-.setting::-webkit-scrollbar-thumb{
-    background:#4d8cff;
-    border-radius:20px;
+/* Supaya latar belakang di balik kartu tetap solid, bukan transparan
+   tembus pandang ke body (khusus mode gelap butuh lapisan tambahan) */
+.setting{
+    background-color: color-mix(in srgb, var(--bg) 85%, transparent);
 }
 
 .setting.show{
     transform:translate(-50%, -50%) scale(1);
     opacity:1;
-    visibility: visible;
+    visibility:visible;
     pointer-events:auto;
 }
 
-.setting h3{
-    color:white;
-    margin-bottom:15px;
-    text-align:center;
+/* ----------------------------------------------------------
+   12. SUB-HALAMAN SETTINGS (mekanisme slide + tombol back)
+   .settingTrack digeser pakai translateX() dari script.js
+   berdasarkan index halaman yang lagi aktif.
+---------------------------------------------------------- */
+.settingViewport{
+    overflow:hidden;
+    width:100%;
+    max-height:85vh;
 }
 
-.setting h2{
-    font-size:26px;
+.settingTrack{
+    display:flex;
+    align-items:flex-start;
+    transition: transform .4s cubic-bezier(.65,0,.35,1);
+}
+
+.settingPanel{
+    width:100%;
+    flex-shrink:0;
+    padding:20px;
+    box-sizing:border-box;
+    max-height:85vh;
+    overflow-y:auto;
+    scrollbar-width:thin;
+}
+
+.settingPanel::-webkit-scrollbar{
+    width:6px;
+}
+
+.settingPanel::-webkit-scrollbar-thumb{
+    background: var(--glitch);
+    border-radius:20px;
+}
+
+.panelHeader{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.panelHeader h2{
+    flex:1;
+    font-size:21px;
     font-weight:600;
-    text-align:center;
-    margin-bottom:20px;
-    letter-spacing:2px;
-    color:white;
+    letter-spacing:.5px;
+    color: var(--text);
 }
 
+/* Judul halaman utama settings ditengahin (gak ada tombol back di kiri) */
+[data-panel="home"] .panelHeader h2{
+    text-align:center;
+}
+
+.panelSubtitle{
+    font-size:13px;
+    color: var(--text-dim);
+    margin-bottom:16px;
+    line-height:1.5;
+}
+
+.backBtn,
+.closeBtn{
+    width:36px;
+    height:36px;
+    flex-shrink:0;
+    border:none;
+    border-radius:50%;
+    background: var(--surface-soft);
+    color: var(--text);
+    font-size:18px;
+    cursor:pointer;
+}
+
+.backBtn:hover,
+.closeBtn:hover{
+    background: var(--border);
+}
+
+/* ----------------------------------------------------------
+   13. DAFTAR MENU (dipakai di halaman utama & daftar bahasa)
+---------------------------------------------------------- */
+.menuList{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.menuItem{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    padding:14px 16px;
+    border:none;
+    border-radius:14px;
+    background: var(--surface-soft);
+    color: var(--text);
+    cursor:pointer;
+    text-align:left;
+    transition:.2s;
+}
+
+.menuItem:hover{
+    background: var(--border);
+    transform:translateX(2px);
+}
+
+.menuItem.disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.menuItem.disabled:hover{
+    transform:none;
+}
+
+.menuItem.active{
+    border:1px solid var(--glitch);
+}
+
+.menuIcon{
+    font-size:22px;
+    flex-shrink:0;
+}
+
+.menuBody{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.menuTitle{
+    font-size:15px;
+    font-weight:bold;
+}
+
+.menuDesc{
+    font-size:12px;
+    color: var(--text-dim);
+}
+
+.menuArrow{
+    font-size:20px;
+    color: var(--text-dim);
+}
+
+.langCheck{
+    color: var(--trust);
+    font-weight:bold;
+}
+
+.soonBadge{
+    font-family: var(--font-mono);
+    font-size:10px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:20px;
+    background: var(--surface);
+    color: var(--text-dim);
+}
+
+/* ----------------------------------------------------------
+   14. ITEM PENGATURAN SEDERHANA (mis. baris "Tema — Ganti")
+---------------------------------------------------------- */
 .item{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:15px;
-    color:white;
+    color: var(--text);
 }
 
 .item button{
-    padding:8px 15px;
+    padding:8px 16px;
     border-radius:10px;
-    background:#3b82f6;
+    background: var(--glitch);
     color:white;
+    font-family: var(--font-display);
 }
 
-/* CREDIT*/
-.credit{
-    text-align:center;
-    padding:25px 15px;
-    color:#fff;
-}
-
-.credit h3{
-    font-size:28px;
-    letter-spacing:4px;
-    margin-bottom:10px;
-}
-
-.credit h2{
-    font-size:24px;
-    margin-bottom:5px;
-}
-
-.version{
-    opacity:.7;
-    font-size:15px;
-    margin-bottom:15px;
-}
-
-.tagline{
-    font-style:italic;
-    opacity:.8;
-    line-height:1.7;
-    margin-bottom:20px;
-}
-
-.creditLine{
-    width:70%;
-    height:1px;
-    margin:20px auto;
-    background:rgba(255,255,255,.15);
-}
-
-.creditItem{
+/* ----------------------------------------------------------
+   15. TRUST LEVEL — tombol level di sub-halaman
+---------------------------------------------------------- */
+.tingkat{
     display:flex;
     flex-direction:column;
-    gap:4px;
-    margin-bottom:18px;
-    padding:12px;
-    margin:12px 0;
-    border-radius:12px;
-    background:rgba(255,255,255,.06);
+    gap:10px;
+}
+
+.levelBtn{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:14px 16px;
+    border:2px solid transparent;
+    border-radius:14px;
+    background: var(--surface-soft);
+    color: var(--text);
     text-align:left;
-
+    cursor:pointer;
 }
 
-.creditTitle{
-    font-size:13px;
-    opacity:.6;
-    letter-spacing:1px;
-    text-transform:uppercase;
+.levelBtn:hover{
+    background: var(--border);
 }
 
-.creditName{
-    font-size:18px;
+.levelDot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    flex-shrink:0;
+}
+
+.levelBody{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.levelName{
+    font-size:15px;
     font-weight:bold;
 }
 
-.footerText{
-    margin-top:25px;
-    font-size:13px;
-    opacity:.5;
-    font-style:italic;
-    line-height:1.6;
+.levelDesc{
+    font-size:12px;
+    color: var(--text-dim);
 }
 
-/* =========================
-   JAWABAN ABSURD
-========================= */
-
-.absurdBox{
-    margin-top:20px;
-    padding:15px;
-    border-radius:18px;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.12);
-    backdrop-filter:blur(10px);
+.levelBtn.active{
+    background: var(--surface-soft);
 }
 
-.absurdBox h3{
-    text-align:center;
-    margin-bottom:15px;
-    font-size:20px;
-    color:#fff;
-    letter-spacing:1px;
-}
+.levelBtn.normal.active{ border-color: var(--trust); }
+.levelBtn.ringan.active{ border-color: var(--amber); }
+.levelBtn.sedang.active{ border-color: var(--signal); }
+.levelBtn.brutal.active{ border-color: var(--glitch); }
 
+/* ----------------------------------------------------------
+   16. JAWABAN ABSURD
+---------------------------------------------------------- */
 #inputAbsurd{
     width:100%;
     padding:12px 15px;
     border:none;
     outline:none;
     border-radius:12px;
-    background:rgba(255,255,255,.08);
-    color:white;
+    background: var(--surface-soft);
+    color: var(--text);
+    font-family: var(--font-display);
     font-size:15px;
-    box-sizing:border-box;
-    transition:.25s;
+    transition:.2s;
 }
 
 #inputAbsurd::placeholder{
-    color:rgba(255,255,255,.5);
+    color: var(--text-dim);
 }
 
 #inputAbsurd:focus{
-    background:rgba(255,255,255,.12);
-    box-shadow:0 0 15px rgba(255,255,255,.15);
+    box-shadow: 0 0 0 2px var(--glitch);
 }
 
 .absurdBtn{
     width:100%;
     margin-top:12px;
     padding:12px;
-    border:none;
     border-radius:12px;
-    background:linear-gradient(135deg,#7b2ff7,#f107a3
-);
-
-color:white;
+    background: linear-gradient(135deg, var(--glitch), var(--signal));
+    color:white;
     font-size:15px;
     font-weight:bold;
     cursor:pointer;
-    transition:.25s;
 }
 
 .absurdBtn:hover{
     transform:translateY(-2px);
-    box-shadow:0 5px 15px rgba(123,47,247,.4);
+    box-shadow: 0 6px 18px rgba(139,92,246,.35);
 }
 
 .absurdBtn:active{
@@ -520,242 +782,131 @@ color:white;
 }
 
 .itemAbsurd{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     padding:10px 14px;
     border-radius:12px;
-    background:rgba(255,255,255,.08);
-    color:white;
+    background: var(--surface-soft);
+    color: var(--text);
     font-size:14px;
+    gap:10px;
+}
+
+.itemAbsurd span{
+    flex:1;
     word-break:break-word;
 }
 
-/* ===========================
-   LEVEL BUTTON
-=========================== */
-.tingkat{
-    margin-top:20px;
-    border-top:1px solid rgba(255,255,255,.15);
-    padding-top:20px;
-}
-
-.tingkat h3{
-    text-align:center;
-    color:white;
-    margin-bottom:15px;
-    font-size:20px;
-}
-
-.levelBtn{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    margin-bottom:10px;
-    border:2px solid transparent;
-    border-radius:12px;
-    background:rgba(255,255,255,.08);
-    color:white;
-    font-size:15px;
-    font-family:inherit;
+.hapusAbsurdBtn{
+    width:35px;
+    height:35px;
+    flex-shrink:0;
+    border-radius:10px;
+    background: rgba(255,77,79,.15);
     cursor:pointer;
-    transition:.25s;
+    font-size:16px;
 }
 
-.levelBtn:hover{
-    background:rgba(255,255,255,.15);
-    transform:scale(1.02);
+.hapusAbsurdBtn:hover{
+    transform:scale(1.08);
+    border:1px solid var(--signal);
 }
 
-.levelBtn.active{
-    transform:scale(1.03);
-    font-weight: bold;
+/* ----------------------------------------------------------
+   17. ABOUT / CREDIT
+---------------------------------------------------------- */
+.credit{
+    text-align:center;
+    color: var(--text);
 }
 
-.levelBtn.normal.active{
-    border-color:#2ecc71;
+.creditBrand{
+    font-size:24px;
+    font-weight:700;
+    letter-spacing:2px;
+    margin-bottom:6px;
 }
 
-.levelBtn.ringan.active{
-    border-color:#f1c40f;
+.version{
+    font-family: var(--font-mono);
+    font-size:13px;
+    color: var(--text-dim);
+    margin-bottom:16px;
 }
 
-.levelBtn.sedang.active{
-    border-color:#e74c3c;
+.tagline{
+    font-style:italic;
+    color: var(--text-dim);
+    line-height:1.7;
+    margin-bottom:20px;
 }
 
-.levelBtn.brutal.active{
-    border-color:#9b59b6;
+.creditLine{
+    width:70%;
+    height:1px;
+    margin:20px auto;
+    background: var(--border);
 }
 
-
-/* ===========================
-   LIGHT MODE (Clean Glass Pastel)
-=========================== */
-/* Background gradasi lembut agar tidak flat */
-body.light {
-    background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
-}
-body.light .judul {
-    color: #1e293b;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+.creditItem{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    margin:12px 0;
+    padding:12px;
+    border-radius:12px;
+    background: var(--surface-soft);
+    text-align:left;
 }
 
-/* Display efek kaca terang */
-body.light .display {
-    background: rgba(255, 255, 255, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 25px rgba(148, 163, 184, 0.25);
-}
-body.light .display input,
-body.light #hasil {
-    color: #0f172a;
+.creditTitle{
+    font-size:12px;
+    color: var(--text-dim);
+    letter-spacing:1px;
+    text-transform:uppercase;
 }
 
-/* Body Kalkulator efek kaca */
-body.light .kalkulator {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 10px 30px rgba(148, 163, 184, 0.3);
+.creditName{
+    font-size:17px;
+    font-weight:bold;
 }
 
-/* Tombol Angka */
-body.light .angka {
-    background: rgba(255, 255, 255, 0.85);
-    color: #1e293b;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+.footerText{
+    margin-top:22px;
+    font-size:12px;
+    color: var(--text-dim);
+    font-style:italic;
+    line-height:1.6;
 }
 
-body.light .angka:hover {
-    background: #ffffff;
-}
-
-/* Tombol Setting Icon */
-body.light .settingBtn {
-    background: rgba(255, 255, 255, 0.7);
-    color: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-}
-
-/* Modal Setting saat Light Mode */
-body.light .setting {
-    background: rgba(255, 255, 255, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-body.light .setting h2,
-body.light .setting h3,
-body.light .setting .item,
-body.light .setting .credit,
-body.light .setting .creditTitle,
-body.light .setting .creditName,
-body.light .setting .tagline,
-body.light .setting .footerText,
-body.light .setting .absurdBox h3 {
-    color: #1e293b;
-}
-body.light .setting .creditItem,
-body.light .setting .absurdBox,
-body.light .setting .itemAbsurd {
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    color: #1e293b;
-}
-body.light #inputAbsurd {
-    background: rgba(0, 0, 0, 0.05);
-    color: #1e293b;
-}
-body.light #inputAbsurd::placeholder {
-    color: #64748b;
-}
-body.light .levelBtn {
-    background: rgba(0, 0, 0, 0.05);
-    color: #1e293b;
-}
-body.light .levelBtn:hover {
-    background: rgba(0, 0, 0, 0.1);
-}
-
-
-/* ===========================
-   BRUTAL MODE
-=========================== */
-body.brutal{
-    background:#220909;
-}
-
-body.brutal .judul{
-    color:#ff4d4d;
-    text-shadow:0 0 10px red,0 0 20px red;
-}
-
-body.brutal .op{
-    box-shadow: 0 0 15px red;
-}
-
-/* ===========================
-   ANIMATION
-=========================== */
-@keyframes chaos{
-
-    from{
-        transform:rotate(-2deg);
-    }
-
-    to{
-        transform:rotate(2deg);
-    }
-}
-
-@keyframes slide{
-
-    from{
-        opacity:0;
-        transform:translateX(40px);
-    }
-    
-    to{
-        opacity:1;
-        transform:translateX(0);
-    }
-}
-
-/* ===========================
-   SCROLLBAR
-=========================== */
+/* ----------------------------------------------------------
+   18. SCROLLBAR GLOBAL
+---------------------------------------------------------- */
 ::-webkit-scrollbar{
     width:8px;
 }
+
 ::-webkit-scrollbar-thumb{
-    background:#3b82f6;
+    background: var(--glitch);
     border-radius:10px;
 }
 
-/* ===========================
-   RESPONSIVE
-=========================== */
-@media(max-width:480px){
+/* ----------------------------------------------------------
+   19. RESPONSIVE
+---------------------------------------------------------- */
+@media (max-width:480px){
 
-    .judul{
-        font-size:24px;
-    }
-
-    .display{
-        width:100%;
-        max-width:340px;
-    }
-
-    .kalkulator{
-        width:100%;
-        max-width:340px;
+    .brandMark{
+        font-size:26px;
     }
 
     .kalkulator button{
-        height:58px;
-        font-size:20px;
+        height:56px;
+        font-size:19px;
     }
 
     .setting{
         width:90%;
-        right:5%;
     }
-
 }

@@ -1,212 +1,327 @@
 <!DOCTYPE html>
-<html lang="id">
-
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Kalkulator Sesat</title>
+<title>Wrongulator</title>
 
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0b0c10">
+  
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%237b2ff7'/><stop offset='100%25' stop-color='%23ef4444'/></linearGradient><filter id='glow'><feGaussianBlur stdDeviation='3' result='coloredBlur'/><feMerge><feMergeNode in='coloredBlur'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs><rect width='100' height='100' rx='25' fill='url(%23bg)'/><g filter='url(%23glow)' fill='white' font-family='Arial, sans-serif' font-weight='bold'><text x='20' y='50' font-size='42'>%2B</text><text x='52' y='80' font-size='42'>%C3%B7</text><circle cx='78' cy='28' r='8' fill='%23ffcc00'/></g></svg>">
 
-
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%237b2ff7'/><stop offset='100%' stop-color='%23ef4444'/></linearGradient><filter id='glow'><feGaussianBlur stdDeviation='3' result='coloredBlur'/><feMerge><feMergeNode in='coloredBlur'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs><rect width='100' height='100' rx='25' fill='url(%23bg)'/><g filter='url(%23glow)' fill='white' font-family='Arial, sans-serif' font-weight='bold'><text x='20' y='50' font-size='42'>%2B</text><text x='52' y='80' font-size='42'>%C3%B7</text><circle cx='78' cy='28' r='8' fill='%23ffcc00'/></g></svg>">
+<!-- FONT: Space Grotesk buat judul/UI, JetBrains Mono buat angka -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 
 </head>
-
 <body>
 
-<h1 class="judul">KALKULATOR SESAT</h1>
+<div class="brand">
+    <h1 class="brandMark">WRONGULATOR<span class="brandGlitch" id="brandGlitch"></span></h1>
+    <p class="brandTag" data-i18n="tagline">Calculates fast. Rarely correct.</p>
+</div>
 
-<button class="settingBtn" onclick="bukaSetting()">⚙️</button>
+<button class="settingBtn" onclick="bukaSetting()" aria-label="Settings">⚙️</button>
 
+<!-- ======================================================
+     PANEL SETTINGS
+====================================================== -->
 <div id="setting" class="setting">
 
-<h2>Settings</h2>
+<div class="settingViewport">
+<div class="settingTrack">
 
-<div class="item">
+    <!-- ===== HALAMAN UTAMA SETTINGS ===== -->
+    <div class="settingPanel" data-panel="home">
 
-<span>Tema</span>
+        <div class="panelHeader">
+            <h2 data-i18n="settingsTitle">Settings</h2>
+            <button class="closeBtn" onclick="bukaSetting()" aria-label="Close">✕</button>
+        </div>
 
-<button onclick="gantiTema()">Ganti</button>
+        <div class="menuList">
 
-</div>
+            <!-- Menu Tampilan -->
+            <button class="menuItem" onclick="bukaPanel('tema')">
+                <span class="menuIcon">🎨</span>
+                <span class="menuBody">
+                    <span class="menuTitle" data-i18n="menuAppearanceTitle">Appearance</span>
+                    <span class="menuDesc" id="menuDescTema">Dark</span>
+                </span>
+                <span class="menuArrow">›</span>
+            </button>
 
-<div class="item">
+            <!-- Menu Trust Level -->
+            <button class="menuItem" onclick="bukaPanel('kesulitan')">
+                <span class="menuIcon">🎚️</span>
+                <span class="menuBody">
+                    <span class="menuTitle" data-i18n="menuTrustTitle">Trust Level</span>
+                    <span class="menuDesc" id="menuDescLevel">Reliable</span>
+                </span>
+                <span class="menuArrow">›</span>
+            </button>
 
-<div class="tingkat">
+            <!-- Menu Jawaban Absurd -->
+            <button class="menuItem" onclick="bukaPanel('absurd')">
+                <span class="menuIcon">💬</span>
+                <span class="menuBody">
+                    <span class="menuTitle" data-i18n="menuAbsurdTitle">Absurd Answers</span>
+                    <span class="menuDesc" id="menuDescAbsurd">0 answers</span>
+                </span>
+                <span class="menuArrow">›</span>
+            </button>
 
-    <h3>Tingkat Sesat</h3>
+            <!-- Menu Bahasa -->
+            <button class="menuItem" onclick="bukaPanel('language')">
+                <span class="menuIcon">🌐</span>
+                <span class="menuBody">
+                    <span class="menuTitle" data-i18n="menuLanguageTitle">Language</span>
+                    <span class="menuDesc" id="menuDescLanguage">English</span>
+                </span>
+                <span class="menuArrow">›</span>
+            </button>
 
-    <button 
-    class="levelBtn normal active"
-    onclick="gantiTingkat('normal', this)">
+            <!-- Menu About -->
+            <button class="menuItem" onclick="bukaPanel('about')">
+                <span class="menuIcon">ℹ️</span>
+                <span class="menuBody">
+                    <span class="menuTitle" data-i18n="menuAboutTitle">About</span>
+                    <span class="menuDesc">v0.60</span>
+                </span>
+                <span class="menuArrow">›</span>
+            </button>
 
-        🟢 Normal
-
-    </button>
-
-    <button 
-    class="levelBtn ringan"
-    onclick="gantiTingkat('ringan', this)">
-
-        🟠 Ringan
-
-    </button>
-
-    <button 
-    class="levelBtn sedang"
-    onclick="gantiTingkat('sedang', this)">
-
-        🔴 Sedang
-
-    </button>
-
-    <button 
-    class="levelBtn brutal"
-    onclick="gantiTingkat('brutal', this)">
-
-        🟣 Brutal
-
-    </button>
-
-</div>
-
-</div>
-
-<div class="absurdBox">
-
-<h3>💬 Jawaban Absurd</h3>
-
-<input
-id="inputAbsurd"
-type="text"
-placeholder="Tulis jawaban absurd...">
-
-<button
-class="absurdBtn"
-onclick="tambahAbsurd()">
-
-Tambah Jawaban
-
-</button>
-
-<div id="listAbsurd" class="listAbsurd"></div>
-
-</div>
-
-<div class="credit">
-    <h3>ABOUT</h3>
-
-    <h2>Kalkulator Sesat</h2>
-
-    <p class="version">
-        Version 0.57
-    </p>
-
-    <p class="tagline">
-        "Menghitung lebih cepat,<br>
-        belum tentu lebih benar."
-    </p>
-
-    <div class="creditLine"></div>
-
-    <div class="creditItem">
-
-        <span class="creditTitle">
-            👨‍💻 Made by
-        </span>
-
-        <span class="creditName">
-            Muhammad Jusmi
-        </span>
+        </div>
 
     </div>
 
-    <div class="creditItem">
+    <!-- ===== SUB HALAMAN: TAMPILAN ===== -->
+    <div class="settingPanel" data-panel="tema">
 
-        <span class="creditTitle">
-            🤖 Development Support
-        </span>
+        <div class="panelHeader">
+            <button class="backBtn" onclick="tutupPanel()" aria-label="Back">←</button>
+            <h2 data-i18n="menuAppearanceTitle">Appearance</h2>
+        </div>
 
-        <span class="creditName">
-           ChatGPT & Gemini
-        </span>
-
-    </div>
-
-    <div class="creditItem">
-
-        <span class="creditTitle">
-            ⚡ Powered by
-        </span>
-
-        <span class="creditName">
-            HTML • CSS • JavaScript
-        </span>
+        <div class="panelContent">
+            <div class="item">
+                <span data-i18n="themeLabel">Theme</span>
+                <!-- Label tombol diisi dinamis lewat JS (Switch to Light/Dark) -->
+                <button id="themeSwitchBtn" onclick="gantiTema()">Switch</button>
+            </div>
+        </div>
 
     </div>
 
-    <p class="footerText">
+    <!-- ===== SUB HALAMAN: TRUST LEVEL ===== -->
+    <div class="settingPanel" data-panel="kesulitan">
 
-        Made with ☕, bugs,
-        and questionable math.
+        <div class="panelHeader">
+            <button class="backBtn" onclick="tutupPanel()" aria-label="Back">←</button>
+            <h2 data-i18n="menuTrustTitle">Trust Level</h2>
+        </div>
 
-    </p>
+        <div class="panelContent">
+
+            <p class="panelSubtitle" data-i18n="trustSubtitle">How much should you trust the answer?</p>
+          
+            <div class="tingkat">
+
+                <button class="levelBtn normal active" onclick="gantiTingkat('normal', this)">
+                    <span class="levelDot dotGreen"></span>
+                    <span class="levelBody">
+                        <span class="levelName" data-i18n="levelReliableName">Reliable</span>
+                        <span class="levelDesc" data-i18n="levelReliableDesc">Always correct</span>
+                    </span>
+                </button>
+
+                <button class="levelBtn ringan" onclick="gantiTingkat('ringan', this)">
+                    <span class="levelDot dotAmber"></span>
+                    <span class="levelBody">
+                        <span class="levelName" data-i18n="levelShakyName">Shaky</span>
+                        <span class="levelDesc" data-i18n="levelShakyDesc">Mostly correct</span>
+                    </span>
+                </button>
+
+                <button class="levelBtn sedang" onclick="gantiTingkat('sedang', this)">
+                    <span class="levelDot dotRed"></span>
+                    <span class="levelBody">
+                        <span class="levelName" data-i18n="levelShadyName">Shady</span>
+                        <span class="levelDesc" data-i18n="levelShadyDesc">Coin-flip honesty</span>
+                    </span>
+                </button>
+
+                <button class="levelBtn brutal" onclick="gantiTingkat('brutal', this)">
+                    <span class="levelDot dotPurple"></span>
+                    <span class="levelBody">
+                        <span class="levelName" data-i18n="levelUnhingedName">Unhinged</span>
+                        <span class="levelDesc" data-i18n="levelUnhingedDesc">Expect chaos</span>
+                    </span>
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== SUB HALAMAN: JAWABAN ABSURD ===== -->
+    <div class="settingPanel" data-panel="absurd">
+
+        <div class="panelHeader">
+            <button class="backBtn" onclick="tutupPanel()" aria-label="Back">←</button>
+            <h2 data-i18n="menuAbsurdTitle">Absurd Answers</h2>
+        </div>
+
+        <div class="panelContent">
+
+            <p class="panelSubtitle" data-i18n="absurdSubtitle">Add your own nonsense the calculator can throw back at you.</p>
+
+            <div class="absurdBox">
+
+                <input
+                id="inputAbsurd"
+                type="text"
+                data-i18n-placeholder="absurdPlaceholder"
+                placeholder="Type an absurd answer...">
+
+                <button class="absurdBtn" onclick="tambahAbsurd()" data-i18n="absurdAddBtn">
+                    Add Answer
+                </button>
+
+                <div id="listAbsurd" class="listAbsurd"></div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== SUB HALAMAN: BAHASA ===== -->
+    <div class="settingPanel" data-panel="language">
+
+        <div class="panelHeader">
+            <button class="backBtn" onclick="tutupPanel()" aria-label="Back">←</button>
+            <h2 data-i18n="menuLanguageTitle">Language</h2>
+        </div>
+
+        <div class="panelContent">
+            <div id="languageList" class="menuList"></div>
+        </div>
+
+    </div>
+
+    <!-- ===== SUB HALAMAN: ABOUT ===== -->
+    <div class="settingPanel" data-panel="about">
+
+        <div class="panelHeader">
+            <button class="backBtn" onclick="tutupPanel()" aria-label="Back">←</button>
+            <h2 data-i18n="menuAboutTitle">About</h2>
+        </div>
+
+        <div class="panelContent">
+            <div class="credit">
+
+                <h2 class="creditBrand">WRONGULATOR</h2>
+
+                <p class="version">
+                    <span data-i18n="versionLabel">Version</span> 0.60
+                </p>
+
+                <p class="tagline" data-i18n="tagline">Calculates fast. Rarely correct.</p>
+
+                <div class="creditLine"></div>
+
+                <div class="creditItem">
+                    <span class="creditTitle" data-i18n="creditMadeBy">Made by</span>
+                    <span class="creditName">MJ Interactive</span>
+                </div>
+
+                <div class="creditItem">
+                    <span class="creditTitle" data-i18n="creditDevSupport">Development Support</span>
+                    <span class="creditName">ChatGPT & ClaudeAI</span>
+                </div>
+
+                <div class="creditItem">
+                    <span class="creditTitle" data-i18n="creditPoweredBy">Powered by</span>
+                    <span class="creditName">HTML • CSS • JavaScript</span>
+                </div>
+
+                <p class="footerText" data-i18n="footerText">
+                    Made with coffee, bugs, and questionable math.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 </div>
 
 </div>
 
-</div>
+<!-- ======================================================
+     KARTU UTAMA KALKULATOR
+====================================================== -->
+<main class="calcCard">
 
-<div class="display">
+    <!-- DISPLAY -->
+    <div class="display" id="displayCard">
 
-<input
-type="text"
-id="hasil"
-readonly
-value="0">
+        <!-- STAMP: cap "MISCALCULATED / NONSENSE / REJECTED" -->
+        <div class="stamp" id="stamp"></div>
 
-<button class="delete" onclick="hapus()">⌫</button>
+        <div class="displayRow">
+            <input type="text" id="hasil" readonly value="0">
+            <button class="delete" onclick="hapus()" aria-label="Delete">⌫</button>
+        </div>
 
-</div>
+        <!-- Badge kecil penanda trust level yang lagi aktif -->
+        <div class="trustBadge">
+            <span class="trustDot" id="trustDot"></span>
+            <span id="trustLabel">Reliable</span>
+        </div>
 
-<div class="kalkulator">
+    </div>
 
-<section>
+    <!-- Garis putus-putus + "lubang" di kiri-kanan -->
+    <div class="perforation"></div>
 
-<button class="reset" onclick="resetKalkulator()">C</button>
-<button class="op" onclick="tambahKurungBuka()">(</button>
-<button class="op" onclick="tambahKurungTutup()">)</button>
-<button class="op" onclick="setOperator('%')">%</button>
+    <!-- TOMBOL KALKULATOR -->
+    <div class="kalkulator">
+        <section>
+            <button class="reset" onclick="resetKalkulator()">C</button>
+            <button class="util" onclick="tambahKurungBuka()">(</button>
+            <button class="util" onclick="tambahKurungTutup()">)</button>
+            <button class="op" onclick="setOperator('/')">÷</button>
 
-<button class="angka" onclick="tambahAngka(9)">9</button>
-<button class="angka" onclick="tambahAngka(8)">8</button>
-<button class="angka" onclick="tambahAngka(7)">7</button>
-<button class="op" onclick="setOperator('+')">+</button>
+            <button class="angka" onclick="tambahAngka(9)">9</button>
+            <button class="angka" onclick="tambahAngka(8)">8</button>
+            <button class="angka" onclick="tambahAngka(7)">7</button>
+            <button class="op" onclick="setOperator('*')">×</button>
 
-<button class="angka" onclick="tambahAngka(6)">6</button>
-<button class="angka" onclick="tambahAngka(5)">5</button>
-<button class="angka" onclick="tambahAngka(4)">4</button>
-<button class="op" onclick="setOperator('-')">-</button>
+            <button class="angka" onclick="tambahAngka(6)">6</button>
+            <button class="angka" onclick="tambahAngka(5)">5</button>
+            <button class="angka" onclick="tambahAngka(4)">4</button>
+            <button class="op" onclick="setOperator('-')">-</button>
 
-<button class="angka" onclick="tambahAngka(3)">3</button>
-<button class="angka" onclick="tambahAngka(2)">2</button>
-<button class="angka" onclick="tambahAngka(1)">1</button>
-<button class="op" onclick="setOperator('*')">×</button>
+            <button class="angka" onclick="tambahAngka(3)">3</button>
+            <button class="angka" onclick="tambahAngka(2)">2</button>
+            <button class="angka" onclick="tambahAngka(1)">1</button>
+            <button class="op" onclick="setOperator('+')">+</button>
 
-<button class="op" onclick="tambahAngka('.')">.</button>
-<button class="angka" onclick="tambahAngka(0)">0</button>
-<button class="op" onclick="hitung()">=</button>
-<button class="op" onclick="setOperator('/')">÷</button>
+            <button class="util" onclick="setOperator('%')">%</button>
+            <button class="angka" onclick="tambahAngka(0)">0</button>
+            <button class="util" onclick="tambahAngka('.')">.</button>
+            <button class="equals" onclick="hitung()">=</button>
+            
+        </section>
+    </div>
 
-</section>
-
-</div>
+</main>
 
 <script src="script.js"></script>
 
@@ -217,5 +332,4 @@ value="0">
 </script>
 
 </body>
-
 </html>
